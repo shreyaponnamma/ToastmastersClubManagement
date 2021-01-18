@@ -1,5 +1,13 @@
 <?php
+session_start();
+//To Add Meeting
 
+if (!isset($_SESSION['role'])) {
+    header("Location:../");
+}
+if ($_SESSION['role'] != 'admin') {
+    header("Location:../");
+}
 
 include "../config/config.php";
 
@@ -13,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $gram = mysqli_real_escape_string($connect, $_POST["gram"]);
     $ttm = mysqli_real_escape_string($connect, $_POST["ttm"]);
 
-    $query1 = "INSERT INTO meeting (M_no,Date,Tmod,Gen_Eva,Timer,Ah_Counter,Grammarian,Ttm) VALUES(?,?,?,?,?,?,?,?)";
+    $query1 = "INSERT INTO meeting (m_no,date,tmod,gen_eva,timer,ah_counter,grammarian,ttm) VALUES(?,?,?,?,?,?,?,?)";
     $stmt = $connect->prepare($query1);
     $stmt->bind_param('dsssssss', $mno,$date,$tmod,$gen_eva,$timer,$ah_counter,$gram,$ttm);
     //echo "line1";

@@ -8,7 +8,7 @@
  * Copyright 2019 Creative Tim (http://www.creative-tim.com)
 
  * Designed by www.invisionapp.com Coded by www.creative-tim.com
-
+F
  =========================================================
 
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -4780,7 +4780,7 @@ Created using IcoMoon - icomoon.io
 .nav-pills.nav-pills-info .nav-item .nav-link.active,
 .nav-pills.nav-pills-info .nav-item .nav-link.active:focus,
 .nav-pills.nav-pills-info .nav-item .nav-link.active:hover {
-  background-color: #2CA8FF;
+  background-color:   #005ce6;
 }
 
 .nav-pills.nav-pills-success .nav-item .nav-link.active,
@@ -12415,8 +12415,8 @@ a.fc-more:hover {
 .fc-basic-view .fc-day-top .fc-week-number {
   min-width: 1.5em;
   text-align: center;
-  background-color: #f2f2f2;
-  color: #808080;
+  background-color: aliceblue;
+  color: aliceblue;
 }
 
 /* when week/day number have own column */

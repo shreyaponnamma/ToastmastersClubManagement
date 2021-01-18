@@ -1,27 +1,35 @@
 <?php
+session_start();
 
+//To update the count of conducted meetings
 include '../config/config.php';
 
+if (!isset($_SESSION['role'])) {
+    header("Location:../");
+}
+if ($_SESSION['role'] != 'admin') {
+    header("Location:../");
+}
 
-$sql = "Update attendance set Count = Count+1";
+$sql = "Update attendance set count = count+1";
 
 if( $connect->query($sql) == TRUE){
     $sql = "select  * from attendance";
     $records = mysqli_query($connect,$sql);
     while ($row = mysqli_fetch_assoc($records)){
-        $per = (($row['D_count']/$row['Count'])*100);
-        $usn = $row['Usn'];
-        $cal = "update attendance set Percentage = ($per) where  Usn = $usn";
+        $per = (($row['d_count']/$row['count'])*100);
+        $usn = $row['usn'];
+        $cal = "update attendance set percentage = ($per) where  usn = '$usn'";
         mysqli_query($connect,$cal);
 
     }
-
-    echo  "<script>alert('Updated')</script>";
-    echo "<script>window.location.replace('../public/attendance_info.php')</script>";
+    echo  "<script>alert('Welcome to New Meeting')</script>";
+    echo "<script>window.location.replace('../public/mark.php')</script>";
 
 } else {
-    echo "<script>alert('  failed !!')</script>";
+    echo "<script>alert('Failed Try Again!!')</script>";
 
-    echo "<script>window.location.replace('../public/attendance_info.php')</script>";
+    echo "<script>window.location.replace('../public/mark.php')</script>";
 
 }
+?>

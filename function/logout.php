@@ -1,6 +1,8 @@
 <?php
-session_start(); //to ensure you are using same session
-session_destroy(); //destroy the session
-header("location:../"); //to redirect back to "index.php" after logging out
-exit();
+session_start();
+unset($_SESSION);
+session_destroy();
+session_write_close();
+echo "<script>window.location.replace('../')</script>";
+die;
 ?>

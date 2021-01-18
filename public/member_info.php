@@ -1,7 +1,20 @@
-
 <?php
-include('../config/config.php');
 session_start();
+
+include('../config/config.php');
+if(!isset($_SESSION['role'])) {
+    header("Location:../");
+}
+if($_SESSION['role'] != 'admin') {
+    header("Location:../");
+}
+
+$sql = "SELECT * FROM members";
+if( isset($_GET['search']) ){
+    $name = mysqli_real_escape_string($connect , htmlspecialchars($_GET['search']));
+    $sql = "SELECT * FROM members WHERE name ='$name'";
+}
+$result = $connect->query($sql);
 
 ?>
 <!DOCTYPE html>
@@ -9,12 +22,11 @@ session_start();
 
 <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../upload/tm.jpg">
+    <link rel="icon" type="image/png" href="../upload/tm.jpg">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Member Page
-    </title>
+        Vvce Toastmasters </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
@@ -28,13 +40,15 @@ session_start();
 
 <body class=" sidebar-mini ">
 <div class="wrapper ">
-    <div class="sidebar" data-color="black">
-
+    <div class="sidebar" data-color="">
+        <!--
+          Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+      -->
         <div class="logo">
-            <a href="http://www.toastmasters.org" class="simple-text logo-mini">
+            <a href="../public/admin.php" class="simple-text logo-mini">
                 TM
             </a>
-            <a href="http://www.toastmaster.org.com" class="simple-text logo-normal">
+            <a href="../public/admin.php"  class="simple-text logo-normal">
                 Toastmasters
             </a>
             <div class="navbar-minimize">
@@ -44,82 +58,157 @@ session_start();
                 </button>
             </div>
         </div>
+        <!--Sidebar-->
         <div class="sidebar-wrapper" id="sidebar-wrapper">
             <div class="user">
                 <div class="photo">
-                    <img src="assets/img/tm.jpg" />
+                    <img src="../upload/tm.jpg" alt="" />
                 </div>
                 <div class="info">
-                    <a  href="user.php" class="collapsed">
+                    <a  href="admin.php" >
               <span>
-                ADMIN
-                <b class="caret"></b>
+                VVCE TM Officers
               </span>
                     </a>
                     <div class="clearfix"></div>
-
                 </div>
             </div>
+
             <ul class="nav">
+                <!--Member Details Page-->
                 <li>
-                    <a href="login_info.php">
+                    <a data-toggle="collapse" href="#formsExamples">
                         <i class="now-ui-icons design_app"></i>
-                        <p>Login Details</p>
+                        <p>
+                            Members
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse " id="formsExamples">
+                        <ul class="nav">
+                            <li>
+                                <a href="login_info.php">
+                                    <span class="sidebar-mini-icon">LD</span>
+                                    <span class="sidebar-normal"> Login Details</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="member_info.php">
+                                    <span class="sidebar-mini-icon">D</span>
+                                    <span class="sidebar-normal"> Details </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="new_mem.php">
+                                    <span class="sidebar-mini-icon">NM</span>
+                                    <span class="sidebar-normal"> Add New Member </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!--Meeting Details Page-->
+                <li>
+                    <a data-toggle="collapse" href="#tablesExamples">
+                        <i class="now-ui-icons design_app"></i>
+                        <p>
+                            Meetings
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse " id="tablesExamples">
+                        <ul class="nav">
+                            <li>
+                                <a href="meeting_info.php">
+                                    <span class="sidebar-mini-icon">D</span>
+                                    <span class="sidebar-normal"> Details</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="speech_detail.php">
+                                    <span class="sidebar-mini-icon">S</span>
+                                    <span class="sidebar-normal"> Speeches </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="special_event.php">
+                                    <span class="sidebar-mini-icon">SE</span>
+                                    <span class="sidebar-normal"> Special Events</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!--Attendance Page-->
+                <li>
+                    <a data-toggle="collapse" href="#mapsExamples">
+                        <i class="now-ui-icons design_app"></i>
+                        <p>
+                            Attendance
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse " id="mapsExamples">
+                        <ul class="nav">
+                            <li>
+                                <a href="mark.php">
+                                    <span class="sidebar-mini-icon">MA</span>
+                                    <span class="sidebar-normal"> Mark attendance </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="shortage.php">
+                                    <span class="sidebar-mini-icon">SL</span>
+                                    <span class="sidebar-normal"> Shortage list </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="sem_attend.php">
+                                    <span class="sidebar-mini-icon">SA</span>
+                                    <span class="sidebar-normal"> Sem Attendance </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!--Guest Info-->
+                <li>
+                    <a href="guest_info.php">
+                        <i class="now-ui-icons design_app"></i>
+                        <p>Guest Details</p>
                     </a>
                 </li>
+                <!--Tesimonials-->
                 <li>
-                    <a href="member_info.php">
+                    <a href="views_table.php">
                         <i class="now-ui-icons design_app"></i>
-                        <p>Member Details</p>
+                        <p>Testimonial </p>
                     </a>
                 </li>
+                <!--Edit home page-->
                 <li>
-                    <a href="meeting_info.php">
+                    <a href="home_page.php">
                         <i class="now-ui-icons design_app"></i>
-                        <p>Meeting Details</p>
+                        <p>Edit Home Page</p>
                     </a>
                 </li>
-                <li>
-                    <a href="speech_info.php">
-                        <i class="now-ui-icons design_app"></i>
-                        <p>Speech Details</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="attendance_info.php">
-                        <i class="now-ui-icons design_app"></i>
-                        <p>Attendance</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="special.php">
-                        <i class="now-ui-icons design_app"></i>
-                        <p>Special Event</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="register.php">
-                        <i class="now-ui-icons design_app"></i>
-                        <p>Add New Member</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="anew.php">
-                        <i class="now-ui-icons design_app"></i>
-                        <p>Sem Attendance</p>
-                    </a>
-                </li>
-
+            </ul>
+        </div>
     </div>
-    </div>
-
     <div class="main-panel" id="main-panel">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
-
-                    <a class="navbar-brand" href="user.php">Admin Pannel</a>
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <a class="navbar-brand" href="admin.php" style="color: cornflowerblue" ><h2><b>HELLO  OFFICERS</b></h2>
+                    </a>
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -129,22 +218,23 @@ session_start();
                 <div class="collapse navbar-collapse justify-content-end" id="navigation">
 
                     <ul class="navbar-nav">
-
                         <li class="nav-item">
                             <a class="nav-link" href="../function/logout.php">
                                 <i class="now-ui-icons gestures_tap-01"></i>
+                                Logout
                                 <p>
-                                    <br>Log out
-                                    <span class="d-lg-none d-md-block">Account</span>
+                                    <span class="d-lg-none d-md-block"></span>
                                 </p>
                             </a>
                         </li>
+
                     </ul>
                 </div>
             </div>
         </nav>
         <!-- End Navbar -->
         <div class="panel-header panel-header-sm">
+
         </div>
         <div class="content">
             <div class="row">
@@ -153,9 +243,11 @@ session_start();
                         <div class="card-header">
                             <h4 class="card-title"> Member Information</h4>
                         </div>
+
+                        <!--Displaying Table-->
                         <div class="card-body">
                             <div class="table-responsive">
-                              <?php echo"  <table class='table'>
+                                <?php echo"  <table class='table'>
                                     <thead class='text-primary'>
                                     <th class='text-center'>
                                         Usn
@@ -174,60 +266,73 @@ session_start();
                                     </th>
                                     <th>
                                         Gender
-                                    </th>
-                                    <th>
-                                        Designation
-                                    </th>
+                                    </th>  
                                     <th>
                                         Level
                                     </th>
                                     </thead>";
 
-                              $sql3 = "select * from members";
 
-                              $row = mysqli_query($connect,$sql3);
-                              while ($result2=mysqli_fetch_assoc($row)) {
-
-
-                                  echo "<tr>
-                                        <td>" . $result2['Usn'] . "</td>
-                                        <td>" . $result2['M_id'] . "</td>
-                                        <td>" . $result2['Name'] . "</td>
-                                        <td>" . $result2['Year'] . "</td>
-                                        <td>" . $result2['Dob'] . "</td>
-                                        <td>" . $result2['Gender'] . "</td>
-                                        <td>" . $result2['Designation'] . "</td>
-                                        <td>" . $result2['Level'] . "</td>                                      
-                                         
+                                    $sql3 = "select * from members";
+                                    $row = mysqli_query($connect, $sql3);
+                                    while ($result2 = mysqli_fetch_assoc($row)) {
+                                        $id1 = $result2['usn'];
+                                        echo "<tr>
+                                        <td>" . $result2['usn'] . "</td>
+                                        <td>" . $result2['m_id'] . "</td>
+                                        <td>" . $result2['name'] . "</td>
+                                        <td>" . $result2['year'] . "</td>
+                                        <td>" . $result2['dob'] . "</td>
+                                        <td>" . $result2['gender'] . "</td>
+                                        <td>" . $result2['level'] . "</td>  
                                         
+                                        <td class=\"text-right\">
+                                             <button id='".$id1."' onClick ='delete1(this.id)' type=\"button\" rel=\"tooltip\" class=\"btn btn-danger btn-icon btn-sm \">
+                                                <i class=\"now-ui-icons ui-1_simple-remove\"></i>
+                                             </button>
+                                            </td>                                     
                                     </tr>";
-                              }
 
-                              ?>
-
+                                    }
+                                ?>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
         </div>
 
-    </div>
-        <footer class="footer">
-            <div class=" container-fluid ">
 
-                <div class="copyright" id="copyright">
-                    &copy;
-                    <script>
-                        document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
-                    </script>, Designed by Soujanya S Vernekar & Shreya Ponnamma. &#10084;
+        <footer class="footer">
+            <div class="copyrights">
+                <div class=" container-fluid text-center">
+                    <div class="copyright" id="copyright">
+                        &copy;
+                        <script>
+                            document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
+                        </script>, Designed & Developed by <a href="http://www.linkedin.com/in/soujanya-satish-vernekar" style="color: #00bbff"> Soujanya S Vernekar</a> & <a href="http://www.linkedin.com/in/shreya-ponnamma-13578b148" style="color: #00bbff">Shreya Ponnamma.</a> &#10084;
+                    </div>
                 </div>
             </div>
-        </footer>
 
+        </footer>
+    </div>
 </div>
 
+<script type ="text/javascript">
+
+    function delete1(clicked_id) {
+        if (window.confirm('Do you want to delete?')){
+
+            window.location.href = ("../function/del_member.php?usn="+clicked_id);
+
+        } else {
+            die();
+        }
+
+    }
+</script>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.min.js"></script>
 <script src="assets/js/core/popper.min.js"></script>
@@ -270,12 +375,13 @@ session_start();
 <script src="assets/demo/demo.js"></script>
 <script>
     $(document).ready(function() {
-        demo.checkFullPageBackgroundImage();
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+        demo.initVectorMap();
+
     });
 </script>
 </body>
 
 </html>
-
-
-

@@ -1,10 +1,19 @@
 <?php
+session_start();
 
+//Add Speech Details
 
 include "../config/config.php";
 
+if (!isset($_SESSION['role'])) {
+    header("Location:../");
+}
+if ($_SESSION['role'] != 'admin') {
+    header("Location:../");
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $sl = mysqli_real_escape_string($connect, $_POST["sl"]);
+    //$sl = mysqli_real_escape_string($connect, $_POST["sl"]);
     $usn = mysqli_real_escape_string($connect, $_POST["usn"]);
     $mno = mysqli_real_escape_string($connect, $_POST["mno"]);
     $date = mysqli_real_escape_string($connect, $_POST["date"]);
@@ -13,16 +22,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $eve = mysqli_real_escape_string($connect, $_POST["eva"]);
 
 
-    $query1 = "INSERT INTO speech (Sl_no,Usn,M_no,Date,Title,Level,Evaluator) VALUES(?,?,?,?,?,?,?)";
+    $query1 = "INSERT INTO speech (usn,m_no,date,title,level,evaluator) VALUES(?,?,?,?,?,?)";
     $stmt = $connect->prepare($query1);
-    $stmt->bind_param('ssdssss', $sl, $usn, $mno, $date, $title, $level, $eve);
+    $stmt->bind_param('sdssss',$usn, $mno, $date, $title, $level, $eve);
     //echo "line1";
     if ($stmt->execute()) {
         echo "<script>alert('Speech added')</script>";
-        echo "<script>window.location.replace('../public/speech_info.php')</script>";
+        echo "<script>window.location.replace('../public/speech_detail.php')</script>";
     } else {
+        error_log($stmt->error);
         echo "<script>alert('Speech insertion failed !!')</script>";
-        echo "<script>window.location.replace('../public/speech_info.php')</script>";
+        echo "<script>window.location.replace('../public/speech_detail.php')</script>";
     }
 
 
